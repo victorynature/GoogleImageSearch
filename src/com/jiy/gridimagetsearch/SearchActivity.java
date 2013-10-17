@@ -30,6 +30,10 @@ public class SearchActivity extends Activity {
 	Button btnSearch;
 	ArrayList<ImageResult> imageResults = new ArrayList<ImageResult>();
 	ImageResultArrayAdapter imageAdapter;
+	String image_size;
+	String color_filter;
+	String image_type;
+	String site_filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +45,9 @@ public class SearchActivity extends Activity {
         gvResults.setOnScrollListener(new EndlessScrollListener(){
     	    @Override
     	    public void loadMore(int page, int totalItemsCount) {
-                 
+                 queryImage(totalItemsCount);
     	    }
-            });
+        });
         
         imageAdapter = new ImageResultArrayAdapter(this, imageResults);
         gvResults.setAdapter(imageAdapter);
@@ -65,16 +69,39 @@ public class SearchActivity extends Activity {
     }
     
     public void onImageSearch(View v){
+    	queryImage(0);
+    }
+    public void queryImage(int start){
     	String query = etQuery.getText().toString();
+    	
     	AsyncHttpClient client = new AsyncHttpClient();
-    	client.get("https://ajax.googleapis.com/ajax/services/search/images?rsz=8&"+"start="+0+"&v=1.0&q="+Uri.encode(query), 
+    	String baseUrl="https://ajax.googleapis.com/ajax/services/search/images?rsz=8&";
+    	if(image_size!="blank"){
+    		baseUrl+="imgsz="+image_size+"&";
+    	}
+    	if(color_filter!="blank"){
+    		baseUrl+="imgcolor="+color_filter+"&";
+    	}
+    	if(image_type!="blank"){
+    		baseUrl+="imgtype="+image_type+"&";
+    	}
+    	
+    	if(site_filter!=null){
+    		baseUrl+="as_sitesearch="+site_filter+"&";
+    	}
+    	
+    	baseUrl+="start="+start+"&v=1.0&q="+Uri.encode(query);
+    	if(start==0){
+    		imageResults.clear();
+    	}
+    	client.get(baseUrl,
     			new JsonHttpResponseHandler(){
     		@Override
     		public void onSuccess(JSONObject response){
     			JSONArray imageJsonResults=null;
     			try{
     				imageJsonResults=response.getJSONObject("responseData").getJSONArray("results");
-    				imageResults.clear();
+    				
     				imageAdapter.addAll(ImageResult.fromJSONArray(imageJsonResults));
     				Log.d("DEBUG", imageResults.toString());
     			}
@@ -109,12 +136,15 @@ public class SearchActivity extends Activity {
     	return true;
     }
     
-    /*@Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if(requestCode==1 && resultCode==RESULT_OK){
-    		String etNameStr = data.getExtras().getString("etNameStr");
-    		tv.setText(etNameStr);
+    		image_size = data.getExtras().getString("image_size");
+    		color_filter = data.getExtras().getString("color_filter");
+    		image_type = data.getExtras().getString("image_type");
+    		site_filter = data.getExtras().getString("site_filter");
+    		
     	}
-    } */ 
+    } 
     
 }
