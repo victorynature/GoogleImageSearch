@@ -130,6 +130,10 @@ public class SearchActivity extends Activity {
     		String etQ=etQuery.getText().toString();
     		Intent intent = new Intent(this, SettingActivity.class);
     		intent.putExtra("etQ", etQ);
+    		intent.putExtra("image_size",  image_size);
+    		intent.putExtra("color_filter",  color_filter);
+    		intent.putExtra("image_type",  image_type);
+    		intent.putExtra("site_filter",  site_filter);
     		startActivityForResult(intent, 1);
     	}
     	
