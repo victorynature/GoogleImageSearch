@@ -18,15 +18,5 @@
         android:layout_alignParentTop="true" 
         android:src="@android:drawable/screen_background_light"/>
 
-     <Button
-         android:id="@+id/btnEmail"
-         style="@style/NiceButton"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/ivResult"
-         android:layout_centerHorizontal="true"
-         android:layout_marginTop="42dp"
-         android:onClick="onEmail"
-         android:text="Share" />
 
 </RelativeLayout>

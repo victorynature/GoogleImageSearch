@@ -7,7 +7,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
-import android.view.View;
+import android.view.MenuItem;
+
 
 public class ImageDisplayActivity extends Activity {
 	
@@ -30,14 +31,22 @@ public class ImageDisplayActivity extends Activity {
 		return true;
 	}
 	
-	public void onEmail(View v){
-		Intent intent = new Intent(Intent.ACTION_SEND);
-		intent.setType("plain/text");
-		intent.putExtra(Intent.EXTRA_EMAIL, new String[] { });
-		intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this image!");
-		
-		intent.putExtra(Intent.EXTRA_TEXT, url); 
-		startActivity(Intent.createChooser(intent, ""));
-	}
+	 @Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	    	
+	    	int id =item.getItemId();
+	    	
+	    	if(id==R.id.action_share){
+	    		Intent intent = new Intent(Intent.ACTION_SEND);
+	    		intent.setType("plain/text");
+	    		intent.putExtra(Intent.EXTRA_EMAIL, new String[] { });
+	    		intent.putExtra(Intent.EXTRA_SUBJECT, "Check out this image!");
+	    		
+	    		intent.putExtra(Intent.EXTRA_TEXT, url); 
+	    		startActivity(Intent.createChooser(intent, ""));
+	    	}
+	    	
+	    	return true;
+	    }
 
 }
